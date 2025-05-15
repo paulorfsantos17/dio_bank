@@ -1,0 +1,20 @@
+[project]
+name = "dio-bank"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Paulo Santos",email = "paulorfsantos17@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask (>=3.1.1,<4.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "dio_bank", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
