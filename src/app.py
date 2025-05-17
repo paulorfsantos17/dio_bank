@@ -1,9 +1,11 @@
 import os
+from datetime import datetime
 
 import click
+import sqlalchemy as sa
 from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -11,6 +13,30 @@ class Base(DeclarativeBase):
 
 
 db = SQLAlchemy(model_class=Base)
+
+
+class User(db.Model):
+    id: Mapped[int] = mapped_column(sa.Integer, primary_key=True)
+    username: Mapped[str] = mapped_column(sa.String, unique=True)
+    email: Mapped[str] = mapped_column(sa.String, unique=True)
+
+    def __repr__(self) -> str:
+        return f"User(id={self.id!r}, username={self.name!r})"
+
+
+class Post(db.Model):
+    id: Mapped[int] = mapped_column(sa.Integer, primary_key=True)
+    title: Mapped[str] = mapped_column(sa.String, nullable=False)
+    body: Mapped[str] = mapped_column(sa.String, nullable=False)
+    created: Mapped[datetime] = mapped_column(
+        sa.DateTime, nullable=False, server_default=sa.func.now()
+    )
+    author_id: Mapped[int] = mapped_column(sa.Integer, sa.ForeignKey("user.id"))
+
+    def __repr__(self) -> str:
+        return (
+            f"Post(id={self.id!r}, title={self.name!r}, author_id={self.author_id!r})"
+        )
 
 
 @click.command("init-db")
@@ -27,7 +53,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY="dev",
-        SQLALCHEMY_DATABASE_URI="sqlite:///dio_bank.db",
+        SQLALCHEMY_DATABASE_URI="sqlite:///blog.db",
     )
 
     if test_config is None:
