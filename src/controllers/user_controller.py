@@ -1,11 +1,13 @@
 from http import HTTPStatus
 
 from flask import Blueprint, request
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy import inspect
 
 from src.app import User, db
 
 app = Blueprint("user", __name__, url_prefix="/users")
+from src.utils.requires_roles import requires_role
 
 
 def _create_user():
@@ -14,6 +16,8 @@ def _create_user():
     user = User(
         username=data["username"],
         email=data["email"],
+        password=data["password"],
+        role_id=1,
     )
     db.session.add(user)
     db.session.commit()
@@ -33,6 +37,8 @@ def _list_users():
 
 
 @app.route("/", methods=["GET", "POST"])
+@jwt_required()
+@requires_role("admin")
 def handle_user():
     if request.method == "POST":
         _create_user()
@@ -42,9 +48,20 @@ def handle_user():
 
 
 @app.route("/<int:user_id>", methods=["GET"])
+@jwt_required()
 def get_user(user_id):
+    current_user = get_jwt_identity()
     user = db.get_or_404(User, user_id)
-    return {"id": user.id, "username": user.username, "email": user.email}
+    return {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "role": {
+            "name": user.role.name,
+            "role_id": user.role_id,
+        },
+        "current_user": current_user,
+    }
 
 
 @app.route("/<int:user_id>", methods=["PATCH"])
