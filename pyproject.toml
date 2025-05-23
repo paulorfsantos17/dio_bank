@@ -12,7 +12,19 @@ flask = "^2.3.3"
 flask-sqlalchemy = "^3.1.1"
 flask-migrate = "^4.0.0"
 flask-jwt-extended = "^4.7.1"
+pytest = "^8.3.5"
+pytest-mock = "^3.14.0"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+pythonpath = ["src"]
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+    "integration",
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
