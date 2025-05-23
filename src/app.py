@@ -73,7 +73,7 @@ def init_db_command():
 
 
 # Função factory para criar a aplicação Flask
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY="dev",
