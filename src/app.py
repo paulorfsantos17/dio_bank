@@ -77,9 +77,9 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY="dev",
-        SQLALCHEMY_DATABASE_URI="sqlite:///blog.db",
+        SQLALCHEMY_DATABASE_URI=os.environ["DATABASE_URL"],
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
-        JWT_SECRET_KEY="super-secret",
+        JWT_SECRET_KEY=os.environ["JWT_SECRET_KEY"],
     )
 
     if test_config is None:
