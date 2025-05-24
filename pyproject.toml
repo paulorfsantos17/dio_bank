@@ -16,6 +16,12 @@ pytest = "^8.3.5"
 pytest-mock = "^3.14.0"
 psycopg2-binary = "*"
 gunicorn = "^23.0.0"
+flask-bcrypt = "^1.0.1"
+flask-marshmallow = "^1.3.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-mock = "^3.14.0"
 
 [tool.pytest.ini_options]
 minversion = "6.0"

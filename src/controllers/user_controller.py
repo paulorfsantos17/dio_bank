@@ -4,7 +4,8 @@ from flask import Blueprint, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy import inspect
 
-from src.app import User, db
+from src.app import bcrypt, db
+from src.models import User
 
 app = Blueprint("user", __name__, url_prefix="/users")
 from src.utils.requires_roles import requires_role
@@ -12,11 +13,12 @@ from src.utils.requires_roles import requires_role
 
 def _create_user():
     data = request.json
+    passwordHash = bcrypt.generate_password_hash(data["password"])
 
     user = User(
         username=data["username"],
         email=data["email"],
-        password=data["password"],
+        password=passwordHash,
         role_id=1,
     )
     db.session.add(user)

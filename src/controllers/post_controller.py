@@ -3,7 +3,8 @@ from http import HTTPStatus
 from flask import Blueprint, request
 from sqlalchemy import inspect
 
-from src.app import Post, db
+from src.app import db
+from src.models import Post
 
 app = Blueprint("post", __name__, url_prefix="/posts")
 

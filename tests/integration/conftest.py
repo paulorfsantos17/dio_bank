@@ -6,13 +6,8 @@ from src.app import Role, User, create_app, db
 
 @pytest.fixture()
 def app():
-    app = create_app()
-    app.config.from_mapping(
-        SECRET_KEY="test",
-        SQLALCHEMY_DATABASE_URI="sqlite:///test.db",
-        SQLALCHEMY_TRACK_MODIFICATIONS=False,
-        JWT_SECRET_KEY="test",
-    )
+    app = create_app(environment="TESTING")
+
     with app.app_context():
         db.create_all()
         # other setup can go here
